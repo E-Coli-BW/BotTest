@@ -7,6 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "haosong",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/E-Coli-BW/BotTest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/E-Coli-BW/BotTest/issues"
+  },
+  "homepage": "https://github.com/E-Coli-BW/BotTest#readme"
 }
