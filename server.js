@@ -1,7 +1,8 @@
 var http = require('http');
 var fs = require('fs');
 
-const PORT=8080; 
+// process.env.PORT lets the port be set by Heroku
+const PORT=process.env.PORT || 8080; 
 
 fs.readFile('./index.html', function (err, html) {
 
