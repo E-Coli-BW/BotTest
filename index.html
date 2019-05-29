@@ -1,5 +1,39 @@
 <html>
 <head>
+
+<!-- <h1>Adding 'a' and 'b'</h1>
+<form>
+  a: <input type="number" name="a" id="a"><br>
+  b: <input type="number" name="b" id="a"><br>
+  <button onclick="add()">Add</button>
+</form>
+<script>
+  function add() {
+    var m = document.getElementById("a").value;
+    var n = document.getElementById("b").value;
+    var sum = m + n;
+    alert(sum);
+  }
+</script> -->
+
+
+
+<!-- <script type="text/javascript">
+  // alert("test");
+  function test(){
+    // console.log("dsfasdf")
+    // alert("test got called")
+    var comment=document.getElementById('testid');
+    console.log(comment);
+    // var comment=$('#query_or_comment').val();
+    // var channelID=document.getElementById('channelID');
+    // // var channelID=$('#channelID').val();
+    // var videoID=$('#videoID').val();
+    // alert("yo, test() gets called!");
+    alert("111111111");
+  }
+</script> -->
+  <!-- <button onclick="WriteComment(comment,channelId,videoId)">start writing comment</button> -->
 <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
 <script type="text/javascript">
   /**
@@ -36,16 +70,21 @@ function initClient() {
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
   // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute(comment) {
+  function WriteComment() {
+    var comment=document.getElementById('query_or_comment').value;
+    var channelId=document.getElementById('channelID').value;
+    var videoId=document.getElementById('videoID').value;
     return gapi.client.youtube.commentThreads.insert({
       "part": "snippet",
       "resource": {
         "snippet": {
-          "videoId": "C9BtGtqdkVQ",
+          //"C9BtGtqdkVQ"
+          "videoId":videoId,
           "topLevelComment": {
             "snippet": {
               "textOriginal": comment,
-              "channelId": "UCM7hoxQXE8CE0wTcqOwda5Q"
+              //"UCM7hoxQXE8CE0wTcqOwda5Q"
+              "channelId": channelId
             }
           }
         }
@@ -53,18 +92,63 @@ function initClient() {
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
+                alert(JSON.stringify(response));
                 console.log("Response", response);
               },
               function(err) { console.error("Execute error", err); });
   }
+
+  function ReturnSearchResult() {
+    var query=document.getElementById("query_for_search").value;
+    var channelId=document.getElementById("channelID").value;
+    if(!channelId){
+    var result=gapi.client.youtube.search.list({
+      "part": "snippet",
+      "maxResults": 25,
+      "q": query
+    })
+    }
+    else{
+    var result=gapi.client.youtube.search.list({
+      "part": "snippet",
+      "channelId": channelId,
+      "maxResults": 25,
+      "q": query
+    })
+    }
+
+        result.then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                alert(JSON.stringify(response));
+
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+
+  
+
   gapi.load("client:auth2", function() {
     gapi.auth2.init({client_id: "630938700267-tle7kjki9cif1vgsjbntdfiu2d8jb9mm.apps.googleusercontent.com"});
   });
 </script>
 <button onclick="authenticate().then(loadClient)">authorize and load</button>
-<script type="text/javascript">comment="pass comment into func as parameter";</script>
-<button onclick="execute(comment)">execute</button>
+<!-- <script type="text/javascript">comment="pass comment into func as parameter";</script>
+<script type="text/javascript">videoId="C9BtGtqdkVQ";</script>
+<script type="text/javascript">channelId="UCM7hoxQXE8CE0wTcqOwda5Q"</script>
+<script type="text/javascript">query="test";</script>
+<button onclick="WriteComment(comment,channelId,videoId)">start writing comment</button>
+<button onclick="ReturnSearchResult(query)">query the channel!</button> -->
 </head>
-<body>
-</body>
+    <body>
+
+      query_for_search: <input type="text" name="query_for_search" id="query_for_search"/><br>
+      query_or_comment: <input type="text" name="query_or_comment" id="query_or_comment"/><br>
+      channelID: <input type="text" name="channelID" id="channelID"/><br>
+      videoID: <input type="text" name="videoID" id="videoID"/><br>
+      <!-- <button onclick="WriteComment(document.getElementById('query_or_comment').value,document.getElementById('channelID').value,document.getElementById('videoID').value)">submit</button> -->
+      <!-- WriteComment($('#query_or_comment'),$('#channelID'),$('#videoID')); -->
+      <button onclick="WriteComment()">Submit Comment!(cost 4 quota)</button><br>
+      <button onclick="ReturnSearchResult()">Do the Search!(cost 100 quota) </button>
+    </body>
 </html>
